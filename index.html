@@ -1,0 +1,167 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    
+     <meta charset="UTF-8">
+    <title>Interaktive Einkaufsliste</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            font-weight: bold;
+            color: #D80000; /* Dunkelrot */
+        }
+        ul {
+            list-style: none; /* Entfernt die Standard-Listensymbole */
+            padding: 0;
+        }
+        li {
+            margin-bottom: 5px; /* Fügt einen Abstand zwischen den Listenelementen hinzu */
+            cursor: pointer; /* Ändert den Cursor, um Interaktivität anzudeuten */
+        }
+        .checked {
+            text-decoration: line-through; /* Durchgestrichener Text für abgehakte Elemente */
+            color: #888; /* Graue Farbe für abgehakte Elemente */
+        }
+    </style>
+</head>
+<body>
+    <div id="countdownTimer">Lädt...</div>
+    <div id="countupTimer">Lädt...</div>
+
+    <script src="timer/script.js"></script>
+
+
+    <h1>♥️ EINKAUFSLISTE 30.12</h1>
+
+    <ul id="einkaufsliste">
+        <li class="einkaufsliste-item">
+            <input type="checkbox" id="item-0">
+            <label for="item-0">Tomaten</label>
+        </li>
+        <li class="einkaufsliste-item">
+            <input type="checkbox" id="item-1">
+            <label for="item-1">Zwiebel</label>
+        </li>
+        <li class="einkaufsliste-item">
+            <input type="checkbox" id="item-2">
+            <label for="item-2">Knoblauch</label>
+        </li>
+        <li class="einkaufsliste-item">
+            <input type="checkbox" id="item-3">
+            <label for="item-3">Paprika</label>
+        </li>
+        <li class="einkaufsliste-item">
+            <input type="checkbox" id="item-4">
+            <label for="item-4">Zucchini</label>
+        </li>
+        <li class="einkaufsliste-item">
+            <input type="checkbox" id="item-5">
+            <label for="item-5">Kartoffel</label>
+        </li>
+        <li class="einkaufsliste-item">
+            <input type="checkbox" id="item-6">
+            <label for="item-6">Karotten</label>
+        </li>
+        <li class="einkaufsliste-item">
+            <input type="checkbox" id="item-7">
+            <label for="item-7">Bananen</label>
+        </li>
+        <!-- Fügen Sie weitere Elemente nach dem gleichen Muster hinzu -->
+        <li class="einkaufsliste-item">
+            <input type="checkbox" id="item-8">
+            <label for="item-8">Orangen</label>
+        </li>
+        <li class="einkaufsliste-item">
+            <input type="checkbox" id="item-9" checked>
+            <label for="item-9">Gurken</label>
+        </li>
+        <li class="einkaufsliste-item">
+            <input type="checkbox" id="item-10" checked>
+            <label for="item-10">Bohnen</label>
+        </li>
+        <li class="einkaufsliste-item">
+            <input type="checkbox" id="item-11" checked>
+            <label for="item-11">Spaghetti 2x</label>
+        </li>
+        <li class="einkaufsliste-item">
+            <input type="checkbox" id="item-12" checked>
+            <label for="item-12">Suppennudel 1x</label>
+        </li>
+        <li class="einkaufsliste-item">
+            <input type="checkbox" id="item-13">
+            <label for="item-13">Mehl (glatt, normales Weizenmehl)</label>
+        </li>
+        <li class="einkaufsliste-item">
+            <input type="checkbox" id="item-14" checked>
+            <label for="item-14">Toastbrot</label>
+        </li>
+        <li class="einkaufsliste-item">
+            <input type="checkbox" id="item-15" checked>
+            <label for="item-15">Frisches Schwarzbrot</label>
+        </li>
+        <li class="einkaufsliste-item">
+            <input type="checkbox" id="item-16" checked>
+            <label for="item-16">Eier</label>
+        </li>
+        <li class="einkaufsliste-item">
+            <input type="checkbox" id="item-17" checked>
+            <label for="item-17">Putenwürstchen 2x</label>
+        </li>
+        <li class="einkaufsliste-item">
+            <input type="checkbox" id="item-18" checked>
+            <label for="item-18">Türkisches Yoghurt</label>
+        </li>
+        <li class="einkaufsliste-item">
+            <input type="checkbox" id="item-19" checked>
+            <label for="item-19">Soßen-Binder</label>
+        </li>
+        <li class="einkaufsliste-item">
+            <input type="checkbox" id="item-20" checked>
+            <label for="item-20">Milch</label>
+        </li>
+    </ul>
+
+
+    <script>
+        // JavaScript, um Elemente als abgehakt zu markieren
+        document.getElementById('einkaufsliste').addEventListener('click', function(e) {
+            if (e.target.tagName === 'LI') {
+                e.target.classList.toggle('checked');
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const einkaufsliste = document.getElementById('einkaufsliste');
+
+            // Zustand beim Laden der Seite wiederherstellen
+            const gespeicherteElemente = JSON.parse(localStorage.getItem('abgehakteElemente')) || [];
+            gespeicherteElemente.forEach(index => {
+                einkaufsliste.children[index].classList.add('checked');
+            });
+
+            // Event-Listener, um Elemente als abgehakt zu markieren und den Zustand zu speichern
+            einkaufsliste.addEventListener('click', function(e) {
+                if (e.target.tagName === 'LI') {
+                    e.target.classList.toggle('checked');
+                    speichereZustand();
+                }
+            });
+
+            // Funktion zum Speichern des Zustands der Checkliste
+            function speichereZustand() {
+                const abgehakteElemente = [];
+                Array.from(einkaufsliste.children).forEach((li, index) => {
+                    if (li.classList.contains('checked')) {
+                        abgehakteElemente.push(index);
+                    }
+                });
+                localStorage.setItem('abgehakteElemente', JSON.stringify(abgehakteElemente));
+            }
+        });
+
+    </script>
+</body>
+</html>
